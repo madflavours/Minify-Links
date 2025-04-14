@@ -64,6 +64,3 @@ Below are the available API endpoints in this service, including request types, 
 
 ```bash
 ./mvnw spring-boot:run
-
-
-

@@ -13,7 +13,7 @@ public interface UserUrlService {
 
 	public Mono<UserUrlDTO> update(String shortCode, String url);
 
-	public boolean delete(String shortCode);
+	public Mono<Boolean> delete(String shortCode);
 
 	public Mono<StatisticsDTO> getStats(String shortCode);
 

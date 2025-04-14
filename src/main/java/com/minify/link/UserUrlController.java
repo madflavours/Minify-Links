@@ -57,13 +57,12 @@ public class UserUrlController {
 	}
 
 	@DeleteMapping("/{shortCode}")
-	public ResponseEntity<Void> delete(@PathVariable String shortCode) {
+	public Mono<ResponseEntity<Void>> delete(@PathVariable String shortCode) {
 		log.info("Requesting To Delete URL Details For Short Code {}", shortCode);
-		boolean result = userUrlService.delete(shortCode);
-		if (result) {
-			return ResponseEntity.noContent().build();
-		}
-		return ResponseEntity.notFound().build();
+		return userUrlService.delete(shortCode)
+				.map(success -> 
+				success ? ResponseEntity.noContent().build() : 
+					ResponseEntity.notFound().build());
 	}
 
 	@GetMapping("/{shortCode}/stats")

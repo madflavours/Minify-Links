@@ -56,22 +56,18 @@ public class UserUrlServiceImpl implements UserUrlService {
 		return userUrlRepository.findByShortCode(shortCode).flatMap(source -> {
 			source.setUrl(url);
 			source.setAccessCount(source.getAccessCount() + 1);
+			source.setUpdatedOn(LocalDateTime.now());
 			return userUrlRepository.save(source);
 		}).map(urlMapper);
 	}
 
 	@Override
-	public boolean delete(String shortCode) {
-		log.debug("Get URL For ShortCode {]", shortCode);
-		try {
-			userUrlRepository.deleteByShortCode(shortCode);
-			return true;
-
-		} catch (Exception e) {
-			log.error("Recording Unknown Error: {}", e.getLocalizedMessage());
-		}
-		return false;
-
+	public Mono<Boolean> delete(String shortCode) {
+		log.debug("Get URL For ShortCode {}", shortCode);
+		return userUrlRepository.deleteByShortCode(shortCode).then(Mono.just(true)).onErrorResume(e -> {
+			log.error("Error deleting record: {}", e.getMessage());
+			return Mono.just(false);
+		});
 	}
 
 	@Override
