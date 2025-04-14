@@ -2,6 +2,8 @@
 
 A simple reactive REST API built with **Spring Boot** and **Reactive MongoDB**. This project demonstrates a lightweight URL shortening service using non-blocking programming principles.
 
+This is a RoadMap Project. Check out this URL for the project outline: https://roadmap.sh/projects/url-shortening-service
+
 ---
 
 ## 🛠 Tech Stack
