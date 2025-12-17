@@ -1,9 +1,8 @@
 package com.minify.link;
 
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.function.Supplier;
-
-import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
@@ -17,9 +16,22 @@ public class UserUrlServiceImpl implements UserUrlService {
 	private final StatisticsMapper statisticsMapper;
 	private final UserUrlRepository userUrlRepository;
 
-	private Supplier<String> getAlphaCode = () -> RandomStringUtils.randomAlphabetic(4);
-	private Supplier<String> getNumericCode = () -> RandomStringUtils.randomNumeric(4);
+	private Supplier<String> getAlphaCode = () -> generateRandomAlphaString(4);
 
+	private static final String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+	private static final SecureRandom SECURE_RANDOM = new SecureRandom();
+
+	private String generateRandomAlphaString(int length) {
+	    StringBuilder sb = new StringBuilder(length);
+	    for (int i = 0; i < length; i++) {
+	        sb.append(ALPHABET.charAt(SECURE_RANDOM.nextInt(ALPHABET.length())));
+	    }
+	    return sb.toString();
+	}
+private Supplier<String> getNumericCode = () -> {
+	    int number = SECURE_RANDOM.nextInt(9000) + 1000; // ensures a 4-digit number
+	    return String.valueOf(number);
+	};
 	public UserUrlServiceImpl(UrlMapper urlMapper, StatisticsMapper statisticsMapper,
 			UserUrlRepository userUrlRepository) {
 		super();
