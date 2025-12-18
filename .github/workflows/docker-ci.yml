@@ -1,0 +1,37 @@
+name: Docker CI
+
+on:
+  pull_request:
+    branches: [ master, '**' ]
+  push:
+    branches: [ master ]
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Lint Dockerfile
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: Dockerfile
+
+      - name: Build Docker image
+        run: docker build -t minify-links .
+
+      - name: Run Docker container
+        run: |
+          docker run -d --name minify-links-test -p 8080:8080 minify-links
+          sleep 10
+          docker ps -a
+          docker logs minify-links-test
+
+      - name: Cleanup
+        if: always()
+        run: docker rm -f minify-links-test || true
