@@ -17,8 +17,6 @@ class UserUrlServiceImplTest {
     @Mock
     private UrlMapper urlMapper;
     @Mock
-    private StatisticsMapper statisticsMapper;
-    @Mock
     private UserUrlRepository userUrlRepository;
 
     @InjectMocks
